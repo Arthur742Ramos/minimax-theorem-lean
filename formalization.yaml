@@ -38,6 +38,7 @@ related_formalizations: []
 
 classification:
   arxiv: ["cs.GT", "math.OC"]
+  msc2020: ["91A05"]
 
 status:
   scope: >-
