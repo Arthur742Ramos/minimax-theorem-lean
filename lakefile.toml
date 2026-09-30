@@ -1,0 +1,11 @@
+name = "minimax-theorem"
+version = "0.1.0"
+defaultTargets = ["Minimax"]
+
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4"
+rev = "v4.35.0-rc2"
+
+[[lean_lib]]
+name = "Minimax"
