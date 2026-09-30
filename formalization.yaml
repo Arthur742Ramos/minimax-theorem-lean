@@ -1,0 +1,185 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+version: "v0.4"
+
+project:
+  name: "minimax-theorem-lean"
+  description: >-
+    A Lean formalization of von Neumann's 1928 finite two-player zero-sum
+    minimax theorem, a foundation of modern game theory and a cornerstone
+    of mathematical economics. Nash equilibrium existence builds directly
+    on its mixed-strategy solution concept by extending equilibrium existence
+    beyond the two-player zero-sum case; this is historical motivation, not
+    a claimed Lean proof of Nash's theorem. The formal result is
+    Minimax.minimax_theorem {A B : Type*} [Fintype A] [Fintype B]
+    [Nonempty A] [Nonempty B] (u : A → B → ℝ) :
+    maxminValue u = minmaxValue u. The reported Palomar registry API search
+    on 2026-09-29 for "minimax" returned zero entries. The M1 Mathlib survey
+    found no finite zero-sum game specialization in the pinned Mathlib,
+    whose general Sion saddle-point theorem is reused here.
+  authors: ["Arthur Freitas Ramos"]
+  responsible_maintainers: ["Arthur Freitas Ramos"]
+  license: "BSD-3-Clause"
+
+sources:
+  - title: "Zur Theorie der Gesellschaftsspiele"
+    authors: ["John von Neumann"]
+    type: "article"
+    location: "Mathematische Annalen 100, 295-320, 1928. https://doi.org/10.1007/BF01448847"
+    relationship: "formalizes"
+    author_endorsement: "not-contacted"
+    note: >-
+      Covers the finite two-player zero-sum real-payoff case:
+      {A B : Type*} [Fintype A] [Fintype B] [Nonempty A] [Nonempty B]
+      (u : A → B → ℝ). One payoff u is maximized by A and minimized by B,
+      representing opposing payoffs u and -u. The proof uses Sion's
+      saddle-point theorem rather than von Neumann's original argument.
+
+related_formalizations: []
+
+classification:
+  arxiv: ["cs.GT", "math.OC"]
+
+status:
+  scope: >-
+    The exact main binder and statement, checked against the library, are
+    Minimax.minimax_theorem {A B : Type*} [Fintype A] [Fintype B]
+    [Nonempty A] [Nonempty B] (u : A → B → ℝ) :
+    maxminValue u = minmaxValue u,
+    where maxminValue u = ⨆ x : MixedStrategy A, ⨅ y : MixedStrategy B, expPayoff u x y
+    and minmaxValue u = ⨅ y : MixedStrategy B, ⨆ x : MixedStrategy A, expPayoff u x y.
+    The zero sorry counts refer to the library and Solution.lean;
+    Challenge.lean carries 6 deliberate sorries (3 definition holes and
+    3 theorem placeholders) per the Palomar statement-surface format.
+    The reported 2026-09-29 Palomar registry API search for "minimax"
+    returned zero entries; this dated search is not a universal prior-art claim.
+    The M1 survey of Mathlib v4.35.0-rc2 found no finite zero-sum game
+    specialization. Mathlib Sion.exists_isSaddlePointOn is a proof ingredient;
+    the advertised result is von Neumann's finite-game statement.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: ["propext", "Classical.choice", "Quot.sound"]
+  main_results:
+    - declaration: "Minimax.Palomar.maxmin_le_minmax"
+      file: "Solution.lean"
+      description: >-
+        {A B : Type*} [Fintype A] [Fintype B] [Nonempty A] [Nonempty B]
+        (u : A → B → ℝ) : maxminValue u ≤ minmaxValue u.
+        The maximizing player's guarantee is at most the minimizing player's ceiling.
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Minimax.Palomar.minmax_le_maxmin"
+      file: "Solution.lean"
+      description: >-
+        {A B : Type*} [Fintype A] [Fintype B] [Nonempty A] [Nonempty B]
+        (u : A → B → ℝ) : minmaxValue u ≤ maxminValue u.
+        The reverse inequality follows from a Sion saddle point.
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "Minimax.Palomar.minimax_theorem"
+      file: "Solution.lean"
+      description: >-
+        {A B : Type*} [Fintype A] [Fintype B] [Nonempty A] [Nonempty B]
+        (u : A → B → ℝ) : maxminValue u = minmaxValue u.
+        Antisymmetry combines the two inequalities.
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+
+automation:
+  methods:
+    - method: "agent"
+      models: ["GPT-6.1 via Codex"]
+      framework: "Lean 4 v4.35.0-rc2 and Mathlib v4.35.0-rc2"
+      tool_setup: >-
+        lean-toolchain pins Lean; lakefile.toml and lake-manifest.json pin Mathlib.
+        scripts/verify-palomar.sh configures the managed namespace process shim.
+      cost:
+        wall_time: "not tracked"
+        spend_usd: "subscription-based"
+        hardware: "local machine"
+      prompting_notes: >-
+        Lean checks the implementation and the separate comparator environments.
+        M4_AUDIT.md maps prose claims to exact declarations, binders, and
+        non-Lean provenance where a claim is historical or administrative.
+  spend_usd: "subscription-based"
+  notes: >-
+    AI assistance was used for the formalization and packaging. This milestone
+    performed no Palomar submission or registration.
+
+fidelity:
+  divergences: >-
+    The model has finite nonempty pure-strategy types:
+    {A B : Type*} [Fintype A] [Fintype B] [Nonempty A] [Nonempty B],
+    and a real-valued payoff (u : A → B → ℝ).
+    MixedStrategy (A : Type*) [Fintype A] [Nonempty A] has fields
+    val : A → ℝ, nonneg : ∀ a, 0 ≤ val a, sum_one : ∑ a, val a = 1,
+    so mixed strategies are probability vectors. expPayoff takes
+    (u : A → B → ℝ) (x : MixedStrategy A) (y : MixedStrategy B)
+    and is ∑ a, ∑ b, x.val a * y.val b * u a b;
+    weightedPayoff is its bilinear extension to unrestricted real vectors.
+    maxminValue and minmaxValue take (u : A → B → ℝ) and use real ⨆/⨅;
+    expPayoff_bounds, maxminValue_bounds, and minmaxValue_bounds place
+    payoffs and values between -payoffBound u and payoffBound u,
+    where payoffBound u = ∑ a, ∑ b, |u a b|.
+    One payoff is maximized by A and minimized by B, the zero-sum interpretation
+    u and -u; no separate second-payoff field is required by the statements.
+    exists_payoff_saddle applies Sion.exists_isSaddlePointOn with the minimizing
+    B player first, f := fun y x => weightedPayoff u x y, on compact convex
+    coordinate simplices. The formalization does not cover infinite pure-strategy
+    sets or general n-player games, and does not reproduce the original proof.
+
+alignment:
+  namespace: "Minimax.Palomar"
+  statements:
+    - source: "Finite mixed strategies and expected payoff"
+      lean: "Minimax.MixedStrategy; Minimax.expPayoff; Minimax.maxminValue; Minimax.minmaxValue"
+      module: "Minimax/Basic.lean"
+      status: "defined"
+      note: >-
+        MixedStrategy (A : Type*) [Fintype A] [Nonempty A] carries val,
+        nonneg, and sum_one. The three comparator definitions share
+        {A B : Type*} [Fintype A] [Fintype B] [Nonempty A] [Nonempty B]
+        (u : A → B → ℝ); expPayoff additionally takes
+        (x : MixedStrategy A) (y : MixedStrategy B).
+    - source: "Maxmin is at most minmax"
+      lean: "Minimax.Palomar.maxmin_le_minmax"
+      module: "Solution.lean"
+      status: "proved"
+      note: >-
+        {A B : Type*} [Fintype A] [Fintype B] [Nonempty A] [Nonempty B]
+        (u : A → B → ℝ) : maxminValue u ≤ minmaxValue u.
+        Applies Minimax.maxmin_le_minmax from Minimax/EasyDirection.lean.
+    - source: "Minmax is at most maxmin"
+      lean: "Minimax.Palomar.minmax_le_maxmin"
+      module: "Solution.lean"
+      status: "proved"
+      note: >-
+        {A B : Type*} [Fintype A] [Fintype B] [Nonempty A] [Nonempty B]
+        (u : A → B → ℝ) : minmaxValue u ≤ maxminValue u.
+        Applies Minimax.minmax_le_maxmin from Minimax/HardDirection.lean,
+        using exists_payoff_saddle with the B player first in Sion's theorem.
+    - source: "Von Neumann's finite-game minimax equality"
+      lean: "Minimax.Palomar.minimax_theorem"
+      module: "Solution.lean"
+      status: "proved"
+      note: >-
+        {A B : Type*} [Fintype A] [Fintype B] [Nonempty A] [Nonempty B]
+        (u : A → B → ℝ) : maxminValue u = minmaxValue u.
+        Applies Minimax.minimax_theorem from Minimax/HardDirection.lean.
+
+review:
+  status: "self-assessed"
+  reviewers: ["none"]
+  notes: >-
+    scripts/verify-palomar.sh checks required files, module headers,
+    compilation, exactly six Challenge placeholders, no forbidden proof tokens,
+    Challenge's Lean/Mathlib-only imports and source dependency allowlist,
+    every comparator declaration and its kind in separate Challenge and Solution
+    environments, all Minimax declarations' permitted axioms, the official
+    lake comparator stage, and whitespace. M4_AUDIT.md records the
+    prose-versus-artifact audit. This is local verification, not registry review.
+
+acknowledgements: >-
+  Mathlib contributors and John von Neumann for the source result.

@@ -1,4 +1,6 @@
-import Minimax.Basic
+module
+
+public import Minimax.Basic
 
 /-!
 # The easy minimax inequality
@@ -12,7 +14,7 @@ namespace Minimax
 variable {A B : Type*} [Fintype A] [Fintype B] [Nonempty A] [Nonempty B]
 
 /-- The maxmin value is at most the minmax value. -/
-theorem maxmin_le_minmax (u : A → B → ℝ) : maxminValue u ≤ minmaxValue u := by
+public theorem maxmin_le_minmax (u : A → B → ℝ) : maxminValue u ≤ minmaxValue u := by
   apply ciSup_le
   intro x
   apply le_ciInf

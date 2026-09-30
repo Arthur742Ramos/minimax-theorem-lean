@@ -1,3 +1,5 @@
-import Minimax.Basic
-import Minimax.EasyDirection
-import Minimax.HardDirection
+module
+
+public import Minimax.Basic
+public import Minimax.EasyDirection
+public import Minimax.HardDirection

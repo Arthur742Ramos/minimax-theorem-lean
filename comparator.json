@@ -1,0 +1,19 @@
+{
+  "challenge_module": "Challenge",
+  "solution_module": "Solution",
+  "definition_names": [
+    "Minimax.expPayoff",
+    "Minimax.maxminValue",
+    "Minimax.minmaxValue"
+  ],
+  "theorem_names": [
+    "Minimax.Palomar.maxmin_le_minmax",
+    "Minimax.Palomar.minmax_le_maxmin",
+    "Minimax.Palomar.minimax_theorem"
+  ],
+  "permitted_axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ]
+}

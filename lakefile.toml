@@ -1,6 +1,6 @@
 name = "minimax-theorem"
 version = "0.1.0"
-defaultTargets = ["Minimax"]
+defaultTargets = ["Minimax", "Challenge", "Solution"]
 
 [[require]]
 name = "mathlib"
@@ -9,3 +9,10 @@ rev = "v4.35.0-rc2"
 
 [[lean_lib]]
 name = "Minimax"
+
+[[lean_lib]]
+name = "Challenge"
+moreLeanArgs = ["-Dwarn.sorry=false"]
+
+[[lean_lib]]
+name = "Solution"
