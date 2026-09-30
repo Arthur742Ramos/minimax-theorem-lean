@@ -1,2 +1,1 @@
--- Root module for the minimax theorem formalization.
--- Milestone files will be added under `Minimax/`.
+import Minimax.Basic
